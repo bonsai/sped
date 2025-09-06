@@ -1,0 +1,186 @@
+# OpenAPI 3.0 Specification
+
+openapi: 3.0.0
+info:
+  title: Blog Management System API
+  description: API for managing a blog, including articles, users, categories, and comments.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /articles:
+    get:
+      summary: Retrieve a list of articles
+      responses:
+        '200':
+          description: A list of articles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+    post:
+      summary: Create a new article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Article'
+      responses:
+        '201':
+          description: Article created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+  /articles/{id}:
+    get:
+      summary: Retrieve a specific article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the article
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Article details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '404':
+          description: Article not found
+    put:
+      summary: Update an existing article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the article
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Article'
+      responses:
+        '200':
+          description: Article updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '404':
+          description: Article not found
+    delete:
+      summary: Delete an article
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the article
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Article deleted
+        '404':
+          description: Article not found
+  /auth/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '401':
+          description: Invalid credentials
+components:
+  schemas:
+    Article:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        author:
+          type: string
+        category:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Comment:
+      type: object
+      properties:
+        id:
+          type: string
+        articleId:
+          type: string
+        content:
+          type: string
+        author:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time

@@ -1,0 +1,37 @@
+name: Spec-Driven Development
+
+on:
+  push:
+    paths:
+      - 'want.md'
+      - 'spec/**'
+
+jobs:
+  generate-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Generate OpenAPI from requirements
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generate-openapi.js
+        
+      - name: Validate with Spec Kit
+        run: npx spec-kit validate spec/generated/openapi.yml
+        
+      - name: Trigger Windsurf Agent
+        env:
+          WINDSURF_WEBHOOK: ${{ secrets.WINDSURF_WEBHOOK }}
+        run: |
+          curl -X POST $WINDSURF_WEBHOOK \
+            -H "Content-Type: application/json" \
+            -d '{"action": "generate_code", "spec_path": "spec/generated/openapi.yml"}'

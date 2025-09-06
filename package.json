@@ -1,0 +1,20 @@
+{
+  "name": "spec-driven-project",
+  "version": "1.0.0",
+  "description": "A project for generating OpenAPI specifications and automating code generation using Spec Kit and Windsurf Agent.",
+  "main": "scripts/generate-openapi.js",
+  "scripts": {
+    "generate": "node scripts/generate-openapi.js",
+    "validate": "npx spec-kit validate spec/generated/openapi.yml"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^1.0.0"
+  },
+  "devDependencies": {
+    "spec-kit": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}
