@@ -17,5 +17,6 @@ gh repo create $name --public --source=. --remote=origin --push
 
 # 以降の変更をコミット＆プッシュ
 git add .
-git commit -m "Initial commit"
+git commit -m "Update"
+git branch -M main
 git push -u origin main

@@ -1,14 +1,36 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const fs = require('fs').promises;
 const path = require('path');
+const { setupGeminiConfig } = require('../config');
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// 設定を読み込む
+let genAI;
+
+async function initializeGenAI() {
+    try {
+        // gemini.txtから設定を読み込む
+        await setupGeminiConfig();
+        
+        if (!process.env.GEMINI_API_KEY) {
+            throw new Error('GEMINI_API_KEYが設定されていません。gemini.txtに設定を追加してください。');
+        }
+        
+        genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        return genAI;
+    } catch (error) {
+        console.error('❌ Geminiの初期化中にエラーが発生しました:', error);
+        process.exit(1);
+    }
+}
 
 async function generateOpenAPI() {
+    // Geminiを初期化
+    await initializeGenAI();
     try {
         const requirements = await fs.readFile('want.md', 'utf8');
         
-        const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+        // Use the correct model name for Gemini
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
         
         const prompt = `
 以下の要件からOpenAPI 3.0仕様を生成してください。

@@ -1,0 +1,20 @@
+{
+  "api": {
+    "version": "1.0.0",
+    "title": "SPED API",
+    "description": "Simple Project Environment for Development"
+  },
+  "paths": {
+    "spec": "./spec",
+    "client": "./client",
+    "server": "./server"
+  },
+  "openapi": {
+    "version": "3.0.0",
+    "specFile": "./spec/openapi.yml"
+  },
+  "server": {
+    "port": 3000,
+    "environment": "development"
+  }
+}

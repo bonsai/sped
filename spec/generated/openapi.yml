@@ -1,186 +1,134 @@
-# OpenAPI 3.0 Specification
-
 openapi: 3.0.0
 info:
-  title: Blog Management System API
-  description: API for managing a blog, including articles, users, categories, and comments.
-  version: 1.0.0
-servers:
-  - url: http://localhost:3000/api
+  title: Java Project Manager VSCode Extension API
+  version: v1.0.0
+  description: API for interacting with the Java Project Manager VSCode Extension.
+
 paths:
-  /articles:
+  /project:
     get:
-      summary: Retrieve a list of articles
+      summary: Get project details
+      description: Retrieves details about the current Java project.
       responses:
         '200':
-          description: A list of articles
+          description: Project details retrieved successfully.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Article'
+                $ref: '#/components/schemas/ProjectDetails'
+        '404':
+          description: No project found.
+        '500':
+          description: Internal server error.
     post:
-      summary: Create a new article
+      summary: Create a new project
+      description: Creates a new Java project based on the provided details.
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Article'
+              $ref: '#/components/schemas/NewProjectRequest'
       responses:
         '201':
-          description: Article created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Article'
-  /articles/{id}:
-    get:
-      summary: Retrieve a specific article
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the article
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Article details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Article'
-        '404':
-          description: Article not found
-    put:
-      summary: Update an existing article
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the article
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Article'
-      responses:
-        '200':
-          description: Article updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Article'
-        '404':
-          description: Article not found
-    delete:
-      summary: Delete an article
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The ID of the article
-          schema:
-            type: string
-      responses:
-        '204':
-          description: Article deleted
-        '404':
-          description: Article not found
-  /auth/login:
-    post:
-      summary: User login
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-      responses:
-        '200':
-          description: Successful login
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-        '401':
-          description: Invalid credentials
+          description: Project created successfully.
+        '400':
+          description: Invalid project details.
+        '500':
+          description: Internal server error.
+
+
 components:
   schemas:
-    Article:
+    ProjectDetails:
       type: object
       properties:
-        id:
-          type: string
-        title:
-          type: string
-        content:
-          type: string
-        author:
-          type: string
-        category:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-        username:
-          type: string
-        password:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    Category:
-      type: object
-      properties:
-        id:
-          type: string
         name:
           type: string
-        createdAt:
+          description: Project name.
+        path:
           type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    Comment:
+          description: Project path.
+        files:
+          type: array
+          items:
+            type: string
+          description: List of files in the project.
+        dependencies:
+          type: array
+          items:
+            type: string
+          description: List of project dependencies.
+
+    NewProjectRequest:
       type: object
       properties:
-        id:
+        name:
           type: string
-        articleId:
+          description: Name of the new project.
+        location:
           type: string
-        content:
+          description: Path where the project should be created.
+        dependencies:
+          type: array
+          items:
+            type: string
+          description: Initial dependencies for the project.
+
+    CommandResponse:
+      type: object
+      properties:
+        status:
           type: string
-        author:
+          description: Status of the command execution (e.g., success, failed).
+        message:
           type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+          description: A message providing more details about the execution.
+
+
+  securitySchemes:
+    apiKeyAuth:  # Example using API key authentication
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+security:
+  - apiKeyAuth: [] # Applies API key authentication to all paths
+
+
+# Example usage of commands via API -  Could be expanded further.
+#  /commands/scanProject, /commands/setupProject, /commands/installJDK would be individual paths.
+#  This illustrates a general pattern for command execution.
+
+#paths:
+#  /commands/{commandName}:
+#    post:
+#      summary: Execute a command
+#      parameters:
+#        - in: path
+#          name: commandName
+#          schema:
+#            type: string
+#          required: true
+#          description: The name of the command to execute (e.g., scanProject, setupProject, installJDK).
+#      requestBody: # Optional request body for command parameters
+#        content:
+#          application/json:
+#            schema:
+#              type: object # Define parameters specific to each command
+#              # Example:
+#              # properties:
+#              #   projectPath:
+#              #     type: string
+#      responses:
+#        '200':
+#          description: Command executed successfully.
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/CommandResponse'
+#        '400':
+#          description: Invalid command or parameters.
+#        '500':
+#          description: Internal server error during command execution.
+
+

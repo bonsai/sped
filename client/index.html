@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPED - Simple Project Environment</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SPED</h1>
+            <p>Simple Project Environment for Development</p>
+        </header>
+
+        <main>
+            <section class="project-form">
+                <h2>Create New Project</h2>
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label for="projectName">Project Name</label>
+                        <input type="text" id="projectName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectDesc">Description (Optional)</label>
+                        <textarea id="projectDesc" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn">Create Project</button>
+                </form>
+            </section>
+
+            <section class="projects-list">
+                <h2>Your Projects</h2>
+                <div id="projectsContainer" class="projects-grid">
+                    <!-- Projects will be loaded here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

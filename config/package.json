@@ -1,0 +1,30 @@
+{
+  "name": "spec-driven-project",
+  "version": "1.0.0",
+  "description": "A project for generating OpenAPI specifications and automating code generation using Spec Kit and Windsurf Agent.",
+  "main": "scripts/generate-openapi.js",
+  "bin": {
+    "jpm": "dist/scripts/cli.js"
+  },
+  "scripts": {
+    "generate": "node scripts/generate-openapi.js",
+    "validate": "C:/Users/dance/python-sdk/python3.13.2/python.exe spec-kit/src/specify_cli/cli.py validate spec/generated/openapi.yml",
+    "build": "tsc",
+    "start": "node dist/scripts/cli.js",
+    "dev": "ts-node scripts/cli.ts",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.5.0",
+    "commander": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}
